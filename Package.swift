@@ -27,6 +27,7 @@ let package = Package(
                 .byName(name: "TonSwift"),
                 .product(name: "BigInt", package: "BigInt"),
                 .product(name: "TweetNacl", package: "tweetnacl-swiftwrap"),
+                .product(name: "Crypto", package: "swift-crypto"),
             ]),
     ]
 )
