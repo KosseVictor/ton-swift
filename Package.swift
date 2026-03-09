@@ -20,6 +20,7 @@ let package = Package(
                 .product(name: "BigInt", package: "BigInt"),
                 .product(name: "TweetNacl", package: "tweetnacl-swiftwrap"),
                 .product(name: "Sodium", package: "swift-sodium"),
+                .product(name: "Crypto", package: "swift-crypto"),
             ]),
         .testTarget(
             name: "TonSwiftTests",
@@ -27,6 +28,7 @@ let package = Package(
                 .byName(name: "TonSwift"),
                 .product(name: "BigInt", package: "BigInt"),
                 .product(name: "TweetNacl", package: "tweetnacl-swiftwrap"),
+                .product(name: "Crypto", package: "swift-crypto"),
             ]),
     ]
 )
