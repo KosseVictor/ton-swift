@@ -98,7 +98,7 @@ public struct Cell: Hashable {
      */
     public static func fromBase64(src: String) throws -> Cell {
         guard let data = Data(base64Encoded: src) else {
-            throw NSError()
+            throw TonError.custom("Invalid base64")
         }
         
         let parsed = try Cell.fromBoc(src: data)

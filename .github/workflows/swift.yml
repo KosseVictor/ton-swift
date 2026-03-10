@@ -5,7 +5,7 @@ on:
   pull_request:
     branches: [ main ]
 jobs:
-  buildAndTest:
+  buildAndTest-macos:
     runs-on: macos-latest
     steps:
     - uses: actions/checkout@v2
@@ -21,3 +21,16 @@ jobs:
       run: cd Example; xcodebuild -workspace ton-swift-example.xcworkspace -scheme ton-swift-example -configuration Release -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 17'
     - name: Test
       run: cd Example; xcodebuild -workspace ton-swift-example.xcworkspace -scheme TonSwift-Unit-Tests -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 17' test
+
+  buildAndTest-linux:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install Swift
+      uses: swift-actions/setup-swift@v2
+      with:
+        swift-version: '5.9'
+    - name: Build
+      run: swift build
+    - name: Test
+      run: swift test

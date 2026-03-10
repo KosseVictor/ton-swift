@@ -5,7 +5,8 @@ import PackageDescription
 let package = Package(
     name: "TonSwift",
     platforms: [
-        .iOS(.v13)
+        .iOS(.v13),
+        .macOS(.v10_15)
     ],
     products: [
         .library(name: "TonSwift", targets: ["TonSwift"]),
@@ -13,7 +14,8 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/attaswift/BigInt", .exact("5.3.0")),
         .package(url: "https://github.com/bitmark-inc/tweetnacl-swiftwrap", .upToNextMajor(from: "1.0.0")),
-        .package(url: "https://github.com/jedisct1/swift-sodium", .exact("0.9.1"))
+        .package(url: "https://github.com/apple/swift-crypto.git", from: "2.6.0"),
+        .package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", from: "1.8.0")
     ],
     targets: [
         .target(
@@ -21,7 +23,8 @@ let package = Package(
             dependencies: [
                 .product(name: "BigInt", package: "BigInt"),
                 .product(name: "TweetNacl", package: "tweetnacl-swiftwrap"),
-                .product(name: "Sodium", package: "swift-sodium"),
+                .product(name: "Crypto", package: "swift-crypto"),
+                .product(name: "CryptoSwift", package: "CryptoSwift"),
             ]),
         .testTarget(
             name: "TonSwiftTests",

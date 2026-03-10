@@ -1,5 +1,5 @@
 import Foundation
-import Clibsodium
+import Crypto
 
 public enum X25519 {
   enum Error: Swift.Error {
@@ -23,18 +23,10 @@ public enum X25519 {
   }
   
   static func getSharedSecret(privateKey: X25519.PrivateKey, publicKey: X25519.PublicKey) throws -> Data {
-    var outputBuffer = Array<UInt8>(repeating: 0, count: .sharedSecretLength)
-    try privateKey.data.withUnsafeBytes { bufferPointer in
-      guard let privateKeyPointer = bufferPointer.baseAddress else { return }
-      try publicKey.data.withUnsafeBytes { bufferPointer in
-        guard let publicKeyPointer = bufferPointer.baseAddress else { return }
-        let statusCode = crypto_scalarmult(&outputBuffer, privateKeyPointer, publicKeyPointer)
-        guard statusCode == 0 else {
-          throw Error.sharedSecretError(code: Int(statusCode))
-        }
-      }
-    }
-    return Data(outputBuffer)
+    let cryptoPrivateKey = try Curve25519.KeyAgreement.PrivateKey(rawRepresentation: privateKey.data)
+    let cryptoPublicKey = try Curve25519.KeyAgreement.PublicKey(rawRepresentation: publicKey.data)
+    let sharedSecret = try cryptoPrivateKey.sharedSecretFromKeyAgreement(with: cryptoPublicKey)
+    return sharedSecret.withUnsafeBytes { Data($0) }
   }
 }
 
@@ -48,15 +40,8 @@ public extension X25519 {
 extension PublicKey {
   var toX25519: X25519.PublicKey {
     get throws {
-      var outputBuffer = Array<UInt8>(repeating: 0, count: .publicKeyLength)
-      try data.withUnsafeBytes { buffer in
-        guard let pointer = buffer.baseAddress else { return }
-        let statusCode = crypto_sign_ed25519_pk_to_curve25519(&outputBuffer, pointer)
-        guard statusCode == 0 else {
-          throw X25519.X25519ConversionError.publicKeyConversionFailed(code: Int(statusCode))
-        }
-      }
-      return X25519.PublicKey(data: Data(outputBuffer))
+      let data = try ed25519PublicKeyToCurve25519(self.data)
+      return X25519.PublicKey(data: data)
     }
   }
 }
@@ -64,15 +49,8 @@ extension PublicKey {
 extension PrivateKey {
   var toX25519: X25519.PrivateKey {
     get throws {
-      var outputBuffer = Array<UInt8>(repeating: 0, count: .privateKeyLength)
-      try data.withUnsafeBytes { buffer in
-        guard let pointer = buffer.baseAddress else { return }
-        let statusCode = crypto_sign_ed25519_sk_to_curve25519(&outputBuffer, pointer)
-        guard statusCode == 0 else {
-          throw X25519.X25519ConversionError.privateKeyConversionFailed(code: Int(statusCode))
-        }
-      }
-      return X25519.PrivateKey(data: Data(outputBuffer))
+      let data = try ed25519PrivateKeyToCurve25519(self.data)
+      return X25519.PrivateKey(data: data)
     }
   }
 }

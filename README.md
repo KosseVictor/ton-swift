@@ -26,7 +26,7 @@ The focus of the library is type safety and serialization. It does not support c
 To run the example project, clone the repo, and run `pod install` from the Example directory first.
 
 # Installation
-Ready for use on iOS 13+.
+Ready for use on **iOS 13+**, **macOS 10.15+**, and **Linux** (Swift 5.5+).
 
 ### CocoaPods:
 [CocoaPods](https://cocoapods.org) is a dependency manager. For usage and installation instructions, visit their website. To integrate using CocoaPods, specify it in your `Podfile`:
@@ -37,7 +37,7 @@ pod 'TonSwift', '1.0.3'
 
 ### Swift Package Manager
 
-The [Swift Package Manager](https://swift.org/package-manager/) is a tool for automating the distribution of Swift code and is integrated into the `swift` compiler. It is in early development, but TonSwift does support its use on supported platforms. 
+The [Swift Package Manager](https://swift.org/package-manager/) is a tool for automating the distribution of Swift code and is integrated into the `swift` compiler. TonSwift supports iOS, macOS, and Linux via SPM.
 
 Once you have your Swift package set up, adding TonSwift as a dependency is as easy as adding it to the `dependencies` value of your `Package.swift`.
 
@@ -45,6 +45,13 @@ Once you have your Swift package set up, adding TonSwift as a dependency is as e
 dependencies: [
     .package(url: "https://github.com/tonkeeper/ton-swift", .exact("1.0.4"))
 ]
+```
+
+### Linux
+On Linux, use Swift Package Manager (install [Swift](https://swift.org/install/) 5.5 or later), then from the project root:
+```bash
+swift build
+swift test
 ```
 
 # Authors
